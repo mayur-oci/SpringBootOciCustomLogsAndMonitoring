@@ -106,7 +106,7 @@ public class LoggingAndMonitoring implements  Runnable{
 
     private static MonitoringClient getMonitoringClient() {
         try {
-            final MonitoringClient monitoringClient = new MonitoringClient((BasicAuthenticationDetailsProvider) getMonitoringClient());
+            final MonitoringClient monitoringClient = new MonitoringClient(getOciAuthProvider());
             monitoringClient.setEndpoint(ConfigHolder.monitoringServiceEndpoint);
             return monitoringClient;
         } catch (Exception e) {
@@ -127,7 +127,7 @@ public class LoggingAndMonitoring implements  Runnable{
         return properties;
     }
 
-    private BasicAuthenticationDetailsProvider getOciAuthProvider() throws IOException {
+    private static BasicAuthenticationDetailsProvider getOciAuthProvider() throws IOException {
         final InstancePrincipalsAuthenticationDetailsProvider provider;
         try {
             provider = InstancePrincipalsAuthenticationDetailsProvider.builder().build();
