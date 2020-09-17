@@ -25,13 +25,13 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoggingAndMonitoring {
+public class LoggingAndMonitoring implements  Runnable{
 
     static Logger logger = Logger.getLogger(LoggingAndMonitoring.class.getName());
 
     // private static MonitoringClient monitoringClient = getMonitoringClient();
 
-    public static void main(String[] args) {
+    public static void logging() {
 //        try {
 //            LogManager.getLogManager().readConfiguration(new FileInputStream("mylogging.properties"));
 //        } catch (SecurityException | IOException e1) {
@@ -150,4 +150,8 @@ public class LoggingAndMonitoring {
         return provider;
     }
 
+    @Override
+    public void run() {
+        logging();
+    }
 }
