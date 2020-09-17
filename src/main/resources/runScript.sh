@@ -11,7 +11,12 @@ rm -rf SpringBootOciCustomLogsAndMonitoring
 
 git clone https://github.com/mayur-oci/SpringBootOciCustomLogsAndMonitoring.git
 
-nohup mvn -f /home/opc/SpringBootOciCustomLogsAndMonitoring/pom.xml spring-boot:run -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005" > ~/appTail.log&
+time 5
 
-bash
+nohup mvn -f /home/opc/SpringBootOciCustomLogsAndMonitoring/pom.xml spring-boot:run -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005" > ~/appTail.log&
 '
+
+rext 158.101.3.137 "bash"
+
+
+
