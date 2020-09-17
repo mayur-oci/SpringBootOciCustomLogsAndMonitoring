@@ -14,9 +14,6 @@ public class App {
         final String configurationFilePath = "~/.oci/config";
         final String profile = "DEFAULT";
 
-        final AuthenticationDetailsProvider provider =
-                new ConfigFileAuthenticationDetailsProvider(configurationFilePath, profile);
-
         SpringApplication.run(App.class, args);
     }
 }

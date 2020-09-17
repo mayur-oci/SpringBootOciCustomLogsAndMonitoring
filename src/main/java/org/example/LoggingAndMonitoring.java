@@ -29,7 +29,7 @@ public class LoggingAndMonitoring {
 
     static Logger logger = Logger.getLogger(LoggingAndMonitoring.class.getName());
 
-    private static MonitoringClient monitoringClient = getMonitoringClient();
+    // private static MonitoringClient monitoringClient = getMonitoringClient();
 
     public static void main(String[] args) {
 //        try {
@@ -66,6 +66,7 @@ public class LoggingAndMonitoring {
         List<Datapoint> datapoints = new ArrayList<>();
         Datapoint dp = new Datapoint(new Date(), 50.0, 1);
         datapoints.add(dp);
+        MonitoringClient monitoringClient = getMonitoringClient();
 
         final PostMetricDataRequest request =
                 PostMetricDataRequest.builder()
