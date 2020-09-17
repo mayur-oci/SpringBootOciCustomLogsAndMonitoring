@@ -52,12 +52,13 @@ public class LoggingAndMonitoring implements  Runnable{
             fileHandler.setFilter(new MyFilter());
             logger.addHandler(fileHandler);
 
-            for (long i = 0; i < (100); i++) {
+            for (long i = 0; i < (1000); i++) {
                 //logging messages
-                logger.log(Level.INFO, "Processed Account # " + i + " accounts :: Success");
+                Thread.sleep(80);
+                logger.log(Level.INFO, " Processed Account # " + i + " accounts :: Success");
             }
             logger.log(Level.CONFIG, "Config data");
-        } catch (SecurityException | IOException e) {
+        } catch (SecurityException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
