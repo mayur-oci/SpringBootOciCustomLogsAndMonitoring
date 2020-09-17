@@ -46,13 +46,13 @@ public class LoggingAndMonitoring implements  Runnable{
         try {
             //FileHandler file name with max size and number of log files limit
             Handler fileHandler = new FileHandler("/home/opc/tmp/logger.log",
-                    Integer.MAX_VALUE, 4, true);
+                    Integer.MAX_VALUE/100, 4, true);
             fileHandler.setFormatter(new MyFormatter());
             //setting custom filter for FileHandler
             fileHandler.setFilter(new MyFilter());
             logger.addHandler(fileHandler);
 
-            for (long i = 0; i < (1000); i++) {
+            for (long i = 0; i < (1000000); i++) {
                 //logging messages
                 Thread.sleep(80);
                 logger.log(Level.INFO, " Processed Account # " + i + " accounts :: Success");

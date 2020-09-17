@@ -23,7 +23,7 @@ systemctl status unified-monitoring-agent
 
 cd /home/opc/tmp/
 
-
+tail -f /var/log/unified-monitoring-agent/unified-monitoring-agent.log
 
 
 
