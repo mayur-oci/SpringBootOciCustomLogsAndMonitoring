@@ -29,9 +29,9 @@ public class LoggingAndMonitoring implements  Runnable{
 
     static Logger logger = Logger.getLogger(LoggingAndMonitoring.class.getName());
 
-    // private static MonitoringClient monitoringClient = getMonitoringClient();
+    private static MonitoringClient monitoringClient = getMonitoringClient();
 
-    public static void logging() {
+    public static void logging(String msg) {
 //        try {
 //            LogManager.getLogManager().readConfiguration(new FileInputStream("mylogging.properties"));
 //        } catch (SecurityException | IOException e1) {
@@ -51,23 +51,19 @@ public class LoggingAndMonitoring implements  Runnable{
             //setting custom filter for FileHandler
             fileHandler.setFilter(new MyFilter());
             logger.addHandler(fileHandler);
+            logger.log(Level.INFO, msg);
 
-            for (long i = 0; i < (1000000); i++) {
-                //logging messages
-                Thread.sleep(80);
-                logger.log(Level.INFO, " Processed Account # " + i + " accounts :: Success");
-            }
-            logger.log(Level.CONFIG, "Config data");
-        } catch (SecurityException | IOException | InterruptedException e) {
+            // logger.log(Level.CONFIG, "Config data");
+        } catch (SecurityException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void postMetricsToOci() {
+    public static void postMetricsToOci(String metricType, Double cpuOrMemUsage) {
         List<Datapoint> datapoints = new ArrayList<>();
-        Datapoint dp = new Datapoint(new Date(), 50.0, 1);
+        Datapoint dp = new Datapoint(new Date(), cpuOrMemUsage, 1);
         datapoints.add(dp);
-        MonitoringClient monitoringClient = getMonitoringClient();
+        // MonitoringClient monitoringClient = getMonitoringClient();
 
         final PostMetricDataRequest request =
                 PostMetricDataRequest.builder()
@@ -78,11 +74,11 @@ public class LoggingAndMonitoring implements  Runnable{
                                                         MetricDataDetails.builder()
                                                                 .compartmentId(ConfigHolder.monitoringCompartmentId)
                                                                 .namespace(ConfigHolder.namespace)
-                                                                .name(ConfigHolder.mem_metric)
+                                                                .name(metricType.equals("mem") ? ConfigHolder.mem_metric : ConfigHolder.cpu_metric)
                                                                 .resourceGroup(ConfigHolder.resourceGroup)
                                                                 .datapoints(datapoints)
                                                                 //.dimensions(bulkMetric.dimensions)
-                                                                .metadata(makeMap("unit", "percentage"))
+                                                                .metadata(makeMap("unit", metricType.equals("mem") ? "percentage" : " GBs"))
                                                                 .build()))
                                         .build())
                         .build();
@@ -153,6 +149,29 @@ public class LoggingAndMonitoring implements  Runnable{
 
     @Override
     public void run() {
-        logging();
+
+        long runInterval = (long) (0.15f*60*60*1000l);
+        long startTimeInMillis = System.currentTimeMillis();
+
+        long count = 100l;
+        for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
+            try {
+                Thread.sleep(300);
+
+                String logMsg = " Processed Account # " + count + " accounts :: Success";
+                logging(logMsg);
+                postMetricsToOci("cpu", random(25, 55));
+                postMetricsToOci("mem", random(5, 15));
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    static double random(int min, int max) {
+        return  (min + (Math.random() * (max - min)));
     }
 }
