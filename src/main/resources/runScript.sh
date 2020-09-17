@@ -11,6 +11,8 @@ rm -rf SpringBootOciCustomLogsAndMonitoring
 
 rm -rf /home/opc/tmp/*
 
+echo '/home/opc/tmp/logger.log.0'
+
 git clone https://github.com/mayur-oci/SpringBootOciCustomLogsAndMonitoring.git
 
 time 3
