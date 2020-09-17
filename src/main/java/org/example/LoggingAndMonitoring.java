@@ -2,9 +2,9 @@ package org.example;
 
 
 import com.oracle.bmc.ConfigFileReader;
-import com.oracle.bmc.Region;
-import com.oracle.bmc.auth.AuthenticationDetailsProvider;
+import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
 import com.oracle.bmc.monitoring.MonitoringClient;
 import com.oracle.bmc.monitoring.model.Datapoint;
 import com.oracle.bmc.monitoring.model.MetricDataDetails;
@@ -13,21 +13,16 @@ import com.oracle.bmc.monitoring.requests.PostMetricDataRequest;
 import com.oracle.bmc.monitoring.responses.PostMetricDataResponse;
 import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.*;
-import java.io.File;
-
-
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class LoggingAndMonitoring {
@@ -57,9 +52,9 @@ public class LoggingAndMonitoring {
             fileHandler.setFilter(new MyFilter());
             logger.addHandler(fileHandler);
 
-            for(long i=0; i<( 10000000); i++){
+            for (long i = 0; i < (10000000); i++) {
                 //logging messages
-                logger.log(Level.INFO, "Processed "+ i + " users");
+                logger.log(Level.INFO, "Processed " + i + " users");
             }
             logger.log(Level.CONFIG, "Config data");
         } catch (SecurityException | IOException e) {
@@ -84,7 +79,7 @@ public class LoggingAndMonitoring {
                                                                 .name(ConfigHolder.mem_metric)
                                                                 .resourceGroup(ConfigHolder.resourceGroup)
                                                                 .datapoints(datapoints)
-                                                                 //.dimensions(bulkMetric.dimensions)
+                                                                //.dimensions(bulkMetric.dimensions)
                                                                 .metadata(makeMap("unit", "percentage"))
                                                                 .build()))
                                         .build())
@@ -97,12 +92,11 @@ public class LoggingAndMonitoring {
             System.out.printf(
                     "\n\nReceived response [opc-request-id: %s]\n", response.getOpcRequestId());
             System.out.printf("%s\n\n", response.getPostMetricDataResponseDetails());
-        }catch(Exception exception){
+        } catch (Exception exception) {
             System.out.println("Error: Could not post these metrics ... Problematic Metrics are " + "\nDue to exception " + exception);
         }
 
     }
-
 
     private static Map<String, String> makeMap(String... data) {
         Map<String, String> map = new HashMap<>();
@@ -113,13 +107,8 @@ public class LoggingAndMonitoring {
     }
 
     private static MonitoringClient getMonitoringClient() {
-        final ConfigFileReader.ConfigFile configFile;
         try {
-            File file = ResourceUtils.getFile("classpath:config");
-            configFile = ConfigFileReader.parse(file.getAbsolutePath(), ConfigHolder.monitoringProfileName);
-            final AuthenticationDetailsProvider provider =
-                    new ConfigFileAuthenticationDetailsProvider(configFile);
-            final MonitoringClient monitoringClient = new MonitoringClient(provider);
+            final MonitoringClient monitoringClient = new MonitoringClient((BasicAuthenticationDetailsProvider) getMonitoringClient());
             monitoringClient.setEndpoint(ConfigHolder.monitoringServiceEndpoint);
             return monitoringClient;
         } catch (Exception e) {
@@ -128,16 +117,36 @@ public class LoggingAndMonitoring {
         }
     }
 
-    public static Properties fetchProperties(){
+    public static Properties fetchProperties() {
         Properties properties = new Properties();
         try {
             File file = ResourceUtils.getFile("classpath:application.properties");
             InputStream in = new FileInputStream(file);
             properties.load(in);
         } catch (IOException e) {
-           // LOGGER.error(e.getMessage());
+            // LOGGER.error(e.getMessage());
         }
         return properties;
+    }
+
+    private BasicAuthenticationDetailsProvider getOciAuthProvider() throws IOException {
+        final InstancePrincipalsAuthenticationDetailsProvider provider;
+        try {
+            provider = InstancePrincipalsAuthenticationDetailsProvider.builder().build();
+        } catch (Exception e) {
+            if (e.getCause() instanceof SocketTimeoutException
+                    || e.getCause() instanceof ConnectException) {
+                System.out.println(
+                        "This sample only works when running on an OCI instance. Are you sure you’re running on an OCI instance? For more info see: https://docs.cloud.oracle.com/Content/Identity/Tasks/callingservicesfrominstances.htm");
+                File file = ResourceUtils.getFile("~/.oci/config");
+                final ConfigFileReader.ConfigFile configFile;
+                configFile = ConfigFileReader.parse(file.getAbsolutePath(), ConfigHolder.monitoringProfileName);
+                return
+                        new ConfigFileAuthenticationDetailsProvider(configFile);
+            }
+            throw e;
+        }
+        return provider;
     }
 
 }

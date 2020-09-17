@@ -10,10 +10,10 @@ public class MyFormatter extends Formatter {
     public String format(LogRecord record) {
 
 
-        return record.getSourceClassName()+"::"
-                +record.getSourceMethodName()+"::"
-                +new Date(record.getMillis())+"::"
-                + record.getMessage()+"\n";
+        return record.getSourceClassName() + "::"
+                + record.getSourceMethodName() + "::"
+                + new Date(record.getMillis()) + "::"
+                + record.getMessage() + "\n";
 //        return record.getThreadID()+"::"+record.getSourceClassName()+"::"
 //                +record.getSourceMethodName()+"::"
 //                +new Date(record.getMillis())+"::"

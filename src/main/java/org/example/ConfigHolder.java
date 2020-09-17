@@ -14,7 +14,7 @@ public class ConfigHolder {
     static public String monitoringCompartmentId = "ocid1.compartment.oc1..aaaaaaaa2z4wup7a4enznwxi3mkk55cperdk3fcotagepjnan5utdb3tvakq";
     static public Region monitoringRegion = Region.US_PHOENIX_1;
 
-    public static String namespace = "Compute";
+    public static String namespace = "Test_Custom_Compute_Namespace";
     public static String mem_metric = "Memory Utilization";
     public static String cpu_metric = "CPU Utilization";
     public static String resourceGroup = "MuShop Resources";
