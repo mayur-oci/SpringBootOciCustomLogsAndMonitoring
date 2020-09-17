@@ -52,9 +52,9 @@ public class LoggingAndMonitoring implements  Runnable{
             fileHandler.setFilter(new MyFilter());
             logger.addHandler(fileHandler);
 
-            for (long i = 0; i < (10000000); i++) {
+            for (long i = 0; i < (100); i++) {
                 //logging messages
-                logger.log(Level.INFO, "Processed " + i + " users");
+                logger.log(Level.INFO, "Processed Account # " + i + " accounts :: Success");
             }
             logger.log(Level.CONFIG, "Config data");
         } catch (SecurityException | IOException e) {

@@ -9,6 +9,8 @@ pkill -f "java"
 
 rm -rf SpringBootOciCustomLogsAndMonitoring
 
+rm -rf /home/opc/tmp/*
+
 git clone https://github.com/mayur-oci/SpringBootOciCustomLogsAndMonitoring.git
 
 time 3
