@@ -17,7 +17,7 @@ time 3
 
 nohup mvn -f /home/opc/SpringBootOciCustomLogsAndMonitoring/pom.xml spring-boot:run -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005" > ~/appTail.log&
 
-systemctl status unified-monitoring-agent
+# systemctl status unified-monitoring-agent
 
 # tail -f ~/appTail.log
 
