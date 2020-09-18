@@ -17,7 +17,9 @@ git clone https://github.com/mayur-oci/SpringBootOciCustomLogsAndMonitoring.git
 
 time 3
 
-nohup mvn -f /home/opc/SpringBootOciCustomLogsAndMonitoring/pom.xml spring-boot:run -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" > ~/appTail.log&
+# nohup mvn -f /home/opc/SpringBootOciCustomLogsAndMonitoring/pom.xml spring-boot:run -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" > ~/appTail.log&
+
+nohup mvn -f /home/opc/SpringBootOciCustomLogsAndMonitoring/pom.xml spring-boot:run > ~/appTail.log
 
 # systemctl status unified-monitoring-agent
 

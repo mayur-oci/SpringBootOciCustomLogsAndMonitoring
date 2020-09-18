@@ -93,12 +93,12 @@ public class LoggingAndMonitoring implements  Runnable{
                         .build();
 
         try {
-            System.out.printf("Request constructed:\n%s\n\n", request.getPostMetricDataDetails());
-            System.out.println("Trying to post metrics...");
+//            System.out.printf("Request constructed:\n%s\n\n", request.getPostMetricDataDetails());
+//            System.out.println("Trying to post metrics...");
             final PostMetricDataResponse response = monitoringClient.postMetricData(request);
-            System.out.printf(
-                    "\n\nReceived response [opc-request-id: %s]\n", response.getOpcRequestId());
-            System.out.printf("%s\n\n", response.getPostMetricDataResponseDetails());
+//            System.out.printf(
+//                    "\n\nReceived response [opc-request-id: %s]\n", response.getOpcRequestId());
+//            System.out.printf("%s\n\n", response.getPostMetricDataResponseDetails());
         } catch (Exception exception) {
             System.out.println("Error: Could not post these metrics ... Problematic Metrics are " + "\nDue to exception " + exception);
         }
