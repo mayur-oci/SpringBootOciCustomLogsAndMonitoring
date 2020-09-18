@@ -38,26 +38,29 @@ public class LoggingAndMonitoring implements  Runnable{
 //        } catch (SecurityException | IOException e1) {
 //            e1.printStackTrace();
 //        }
+
+        try {
+            logger.log(Level.INFO, msg);
+            // logger.log(Level.CONFIG, "Config data");
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setupLogger() throws IOException {
         logger.setLevel(Level.FINE);
         // logger.addHandler(new ConsoleHandler());
         logger.setUseParentHandlers(false);
 
         // adding custom handler
         logger.addHandler(new MyHandler());
-        try {
-            //FileHandler file name with max size and number of log files limit
-            Handler fileHandler = new FileHandler("/home/opc/tmp/logger.log",
-                    Integer.MAX_VALUE/100, 4, true);
-            fileHandler.setFormatter(new MyFormatter());
-            //setting custom filter for FileHandler
-            fileHandler.setFilter(new MyFilter());
-            logger.addHandler(fileHandler);
-            logger.log(Level.INFO, msg);
-
-            // logger.log(Level.CONFIG, "Config data");
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
-        }
+        //FileHandler file name with max size and number of log files limit
+        Handler fileHandler = new FileHandler("/home/opc/tmp/logger.log",
+                Integer.MAX_VALUE/100, 4, true);
+        fileHandler.setFormatter(new MyFormatter());
+        //setting custom filter for FileHandler
+        fileHandler.setFilter(new MyFilter());
+        logger.addHandler(fileHandler);
     }
 
     public static void postMetricsToOci(String metricType, Double cpuOrMemUsage) {
@@ -156,8 +159,10 @@ public class LoggingAndMonitoring implements  Runnable{
     @Override
     public void run() {
         try {
-            Thread.sleep(3000*5);
-        } catch (InterruptedException e) {
+            Thread.sleep(1000*7);
+            setupLogger();
+
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
 
