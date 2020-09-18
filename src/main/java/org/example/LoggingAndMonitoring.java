@@ -2,6 +2,7 @@ package org.example;
 
 
 import com.oracle.bmc.ConfigFileReader;
+import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
@@ -77,7 +78,12 @@ public class LoggingAndMonitoring implements  Runnable{
                                                                 .name(metricType.equals("mem") ? ConfigHolder.mem_metric : ConfigHolder.cpu_metric)
                                                                 .resourceGroup(ConfigHolder.resourceGroup)
                                                                 .datapoints(datapoints)
-                                                                //.dimensions(bulkMetric.dimensions)
+                                                                .dimensions(makeMap(
+                                                                        "region",
+                                                                        Region.US_PHOENIX_1
+                                                                                .getRegionId(),
+                                                                        "host",
+                                                                        "Oct_Demo"))
                                                                 .metadata(makeMap("unit", metricType.equals("mem") ? "percentage" : " GBs"))
                                                                 .build()))
                                         .build())
@@ -149,6 +155,11 @@ public class LoggingAndMonitoring implements  Runnable{
 
     @Override
     public void run() {
+        try {
+            Thread.sleep(3000*5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         long runInterval = (long) (0.15f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
