@@ -156,34 +156,53 @@ public class LoggingAndMonitoring implements  Runnable{
         return provider;
     }
 
+    static boolean newVersionDeployed = false;
     @Override
     public void run() {
-        try {
-            Thread.sleep(1000*7);
-            setupLogger();
+        setup();
 
-        } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
-        }
-
-        long runInterval = (long) (3.0f*60*60*1000l);
+        long runInterval = (long) (1.0f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
 
         long count = 100l;
         for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
             try {
-                Thread.sleep(500);
+                final boolean isNewAppDeployTimeReached = (long) ((runInterval + startTimeInMillis) * 0.7f) > System.currentTimeMillis();
+                Thread.sleep(1000);
+                final String appBusinessPerfMsg = "Processed Account # %2f accounts in last 1 sec :: Success";
 
-                String logMsg = " Processed Account # " + count + " accounts :: Success";
-                logging(logMsg);
-                postMetricsToOci("cpu", 20+random(-20, 20));
-                postMetricsToOci("mem", 15 + random(-10, 15));
-
-
+                if (!isNewAppDeployTimeReached) {
+                    String logMsg = String.format(appBusinessPerfMsg, random(300, 500) );
+                    logging(logMsg);
+                    postMetricsToOci("cpu", 20 + random(-20, 20));
+                    postMetricsToOci("mem", 25 + random(-10, 15));
+                }else{
+                    if(!newVersionDeployed){
+                        newVersionDeployed = true;
+                        logging("New app/config version deployed. New Version SHA d43858e15bb3f898d221c9501aee84dc19a336c0.");
+                        logging("Previous version SHA for Rollback 5f9cb12485279767e85b3a85dfd992c512bc048e.");
+                        logging("Deployment Engineer Email : goodDeveloper@example.com");
+                        Thread.sleep(1000);
+                    }
+                    Thread.sleep(1000);
+                    String logMsg = String.format(appBusinessPerfMsg, random(50, 100) );
+                    logging(logMsg);
+                    postMetricsToOci("cpu", 80 + random(-7, 15));
+                    postMetricsToOci("mem", 40 + random(-7, 9));
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    private void setup() {
+        try {
+            Thread.sleep(1000*5);
+            setupLogger();
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
         }
     }
 
