@@ -163,19 +163,19 @@ public class LoggingAndMonitoring implements  Runnable{
 
         long runInterval = (long) (1.0f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
-
-        long count = 100l;
+        long degree=-1;
         for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
             try {
+                degree++;
                 final boolean isNewAppDeployTimeReached = (long) ((runInterval + startTimeInMillis) * 0.7f) > System.currentTimeMillis();
                 Thread.sleep(1000);
-                final String appBusinessPerfMsg = "Processed Account # %2f accounts in last 1 sec :: Success";
+                final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
 
                 if (!isNewAppDeployTimeReached) {
-                    String logMsg = String.format(appBusinessPerfMsg, random(300, 500) );
+                    String logMsg = String.format(appBusinessPerfMsg, (int)random(300, 500) );
                     logging(logMsg);
-                    postMetricsToOci("cpu", 20 + random(-20, 20));
-                    postMetricsToOci("mem", 25 + random(-10, 15));
+                    postMetricsToOci("cpu", 30 + 10*mySine(degree)+random(-2, 2));
+                    postMetricsToOci("mem", 25 + 7 *mySine(degree)+random(-3, 3));
                 }else{
                     if(!newVersionDeployed){
                         newVersionDeployed = true;
@@ -187,8 +187,8 @@ public class LoggingAndMonitoring implements  Runnable{
                     Thread.sleep(1000);
                     String logMsg = String.format(appBusinessPerfMsg, random(50, 100) );
                     logging(logMsg);
-                    postMetricsToOci("cpu", 80 + random(-7, 15));
-                    postMetricsToOci("mem", 40 + random(-7, 9));
+                    postMetricsToOci("cpu", 74 + 15*mySine(degree)+random(-3, 3));
+                    postMetricsToOci("mem", 48 + 10*mySine(degree)+random(-3, 3));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -208,5 +208,10 @@ public class LoggingAndMonitoring implements  Runnable{
 
     static double random(int min, int max) {
         return  (min + (Math.random() * (max - min)));
+    }
+
+    static double mySine(double degrees){
+        double radians = Math.toRadians(degrees);
+        return Math.sin(radians);
     }
 }
