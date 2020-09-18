@@ -161,18 +161,18 @@ public class LoggingAndMonitoring implements  Runnable{
             e.printStackTrace();
         }
 
-        long runInterval = (long) (0.15f*60*60*1000l);
+        long runInterval = (long) (3.0f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
 
         long count = 100l;
         for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
             try {
-                Thread.sleep(300);
+                Thread.sleep(500);
 
                 String logMsg = " Processed Account # " + count + " accounts :: Success";
                 logging(logMsg);
-                postMetricsToOci("cpu", random(25, 55));
-                postMetricsToOci("mem", random(5, 15));
+                postMetricsToOci("cpu", 20+random(-20, 20));
+                postMetricsToOci("mem", 15 + random(-10, 15));
 
 
             } catch (InterruptedException e) {
