@@ -161,13 +161,16 @@ public class LoggingAndMonitoring implements  Runnable{
     public void run() {
         setup();
 
-        long runInterval = (long) (2.0f*60*60*1000l);
+        long runInterval = (long) (1.0f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
+
+        long errorTime = startTimeInMillis + (25*60*1000l);
+
         long degree=-1;
         for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
             try {
                 degree++;
-                final boolean isOldAppVersion = (long) ((runInterval + startTimeInMillis) * 0.7f) > System.currentTimeMillis();
+                final boolean isOldAppVersion = System.currentTimeMillis() < errorTime;
                 Thread.sleep(1000);
                 final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
 
@@ -211,7 +214,7 @@ public class LoggingAndMonitoring implements  Runnable{
     }
 
     static double mySine(double degrees){
-        double radians = Math.toRadians(degrees+random(-20,20));
+        double radians = Math.toRadians(degrees+random(-15,15));
         return Math.sin(radians);
     }
 }
