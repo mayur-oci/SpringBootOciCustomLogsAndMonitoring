@@ -161,22 +161,24 @@ public class LoggingAndMonitoring implements  Runnable{
     public void run() {
         setup();
 
-        long runInterval = (long) (1.0f*60*60*1000l);
+        long runInterval = (long) (2.0f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
 
-        long errorTime = startTimeInMillis + (25*60*1000l);
+        long errorTime = startTimeInMillis + (70*60*1000l);
 
         long degree=-1;
         for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
             try {
                 degree++;
                 final boolean isOldAppVersion = System.currentTimeMillis() < errorTime;
-                Thread.sleep(200);
+                Thread.sleep(250);
                 final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
 
                 if (isOldAppVersion) {
-                    String logMsg = String.format(appBusinessPerfMsg, (int)random(380, 500) );
-                    logging(logMsg);
+                    if(degree%15==0){
+                        String logMsg = String.format(appBusinessPerfMsg, (int) random(380, 500));
+                        logging(logMsg);
+                    }
                     postMetricsToOci("cpu", 30 + 10*mySine(degree+90));
                     postMetricsToOci("mem", 25 + 7 *mySine(degree));
                 }else{
@@ -188,8 +190,10 @@ public class LoggingAndMonitoring implements  Runnable{
                         // Thread.sleep(1000);
                     }
                     Thread.sleep(1000);
-                    String logMsg = String.format(appBusinessPerfMsg, (int)random(50, 100) );
-                    logging(logMsg);
+                    if(degree%15==0){
+                        String logMsg = String.format(appBusinessPerfMsg, (int) random(50, 100));
+                        logging(logMsg);
+                    }
                     postMetricsToOci("cpu", 74 + 15*mySine(degree+90));
                     postMetricsToOci("mem", 48 + 10*mySine(degree));
                 }
@@ -214,7 +218,7 @@ public class LoggingAndMonitoring implements  Runnable{
     }
 
     static double mySine(double degrees){
-        double radians = Math.toRadians(degrees+random(-15,15));
+        double radians = Math.toRadians(degrees+random(-100,100));
         return Math.sin(radians);
     }
 }
