@@ -175,12 +175,12 @@ public class LoggingAndMonitoring implements  Runnable{
                 final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
 
                 if (isOldAppVersion) {
-                    if(degree%15==0){
+                    if(degree%35==0){
                         String logMsg = String.format(appBusinessPerfMsg, (int) random(380, 500));
                         logging(logMsg);
                     }
-                    postMetricsToOci("cpu", 30 + 10*mySine(degree+90));
-                    postMetricsToOci("mem", 25 + 7 *mySine(degree));
+                    postMetricsToOci("cpu", 30 + 10*mySine1(degree+90));
+                    postMetricsToOci("mem", 25 + 7 *mySine2(degree));
                 }else{
                     if(!newVersionDeployed){
                         newVersionDeployed = true;
@@ -190,12 +190,12 @@ public class LoggingAndMonitoring implements  Runnable{
                         // Thread.sleep(1000);
                     }
                     Thread.sleep(1000);
-                    if(degree%15==0){
+                    if(degree%35==0){
                         String logMsg = String.format(appBusinessPerfMsg, (int) random(50, 100));
                         logging(logMsg);
                     }
-                    postMetricsToOci("cpu", 74 + 15*mySine(degree+90));
-                    postMetricsToOci("mem", 48 + 10*mySine(degree));
+                    postMetricsToOci("cpu", 74 + 15*mySine1(degree+90));
+                    postMetricsToOci("mem", 48 + 10*mySine2(degree));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -217,8 +217,19 @@ public class LoggingAndMonitoring implements  Runnable{
         return  (min + (Math.random() * (max - min)));
     }
 
-    static double mySine(double degrees){
+    static double mySine1(double degrees){
         double radians = Math.toRadians(degrees+random(-100,100));
+        if((System.currentTimeMillis()/1000)%200!=0 )
         return Math.sin(radians);
+        else
+        return (Math.sin(radians) + Math.cos(radians+60) )/2;
+    }
+
+    static double mySine2(double degrees){
+        double radians = Math.toRadians(degrees+random(-100,100));
+        if((System.currentTimeMillis()/1000)%400!=0 )
+            return Math.sin(radians);
+        else
+            return (Math.sin(radians) + Math.cos(radians+45) )/2;
     }
 }
