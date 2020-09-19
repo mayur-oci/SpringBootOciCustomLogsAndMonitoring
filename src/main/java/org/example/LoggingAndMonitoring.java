@@ -171,13 +171,13 @@ public class LoggingAndMonitoring implements  Runnable{
             try {
                 degree++;
                 final boolean isOldAppVersion = System.currentTimeMillis() < errorTime;
-                Thread.sleep(1000);
+                Thread.sleep(200);
                 final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
 
                 if (isOldAppVersion) {
-                    String logMsg = String.format(appBusinessPerfMsg, (int)random(300, 500) );
+                    String logMsg = String.format(appBusinessPerfMsg, (int)random(380, 500) );
                     logging(logMsg);
-                    postMetricsToOci("cpu", 30 + 10*mySine(degree));
+                    postMetricsToOci("cpu", 30 + 10*mySine(degree+90));
                     postMetricsToOci("mem", 25 + 7 *mySine(degree));
                 }else{
                     if(!newVersionDeployed){
@@ -185,12 +185,12 @@ public class LoggingAndMonitoring implements  Runnable{
                         logging("New app/config version deployed. New Version SHA d43858e15bb3f898d221c9501aee84dc19a336c0.");
                         logging("Previous version SHA for Rollback 5f9cb12485279767e85b3a85dfd992c512bc048e.");
                         logging("Deployment Engineer Email : goodDeveloper@example.com");
-                        Thread.sleep(1000);
+                        // Thread.sleep(1000);
                     }
                     Thread.sleep(1000);
-                    String logMsg = String.format(appBusinessPerfMsg, random(50, 100) );
+                    String logMsg = String.format(appBusinessPerfMsg, (int)random(50, 100) );
                     logging(logMsg);
-                    postMetricsToOci("cpu", 74 + 15*mySine(degree));
+                    postMetricsToOci("cpu", 74 + 15*mySine(degree+90));
                     postMetricsToOci("mem", 48 + 10*mySine(degree));
                 }
             } catch (InterruptedException e) {
