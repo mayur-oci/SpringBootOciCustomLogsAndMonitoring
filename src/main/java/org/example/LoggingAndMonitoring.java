@@ -161,17 +161,17 @@ public class LoggingAndMonitoring implements  Runnable{
     public void run() {
         setup();
 
-        long runInterval = (long) (2.0f*60*60*1000l);
+        long runInterval = (long) (0.5f*60*60*1000l);
         long startTimeInMillis = System.currentTimeMillis();
 
-        long errorTime = startTimeInMillis + (70*60*1000l);
+        long errorTime = startTimeInMillis + (20*60*1000l);
 
         long degree=-1;
         for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
             try {
                 degree++;
                 final boolean isOldAppVersion = System.currentTimeMillis() < errorTime;
-                Thread.sleep(250);
+                Thread.sleep(200);
                 final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
 
                 if (isOldAppVersion) {
