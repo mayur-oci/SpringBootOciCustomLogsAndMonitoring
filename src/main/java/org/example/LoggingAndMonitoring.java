@@ -63,7 +63,7 @@ public class LoggingAndMonitoring implements  Runnable{
         logger.addHandler(fileHandler);
     }
 
-    public static void postMetricsToOci(String metricType, Double cpuOrMemUsage) {
+    public static void postMetricsToOci(String metricType, Double cpuOrMemUsage, long timestamp) {
         List<Datapoint> datapoints = new ArrayList<>();
         Datapoint dp = new Datapoint(new Date(), cpuOrMemUsage, 1);
         datapoints.add(dp);
@@ -161,26 +161,28 @@ public class LoggingAndMonitoring implements  Runnable{
     public void run() {
         setup();
 
-        long runInterval = (long) (0.5f*60*60*1000l);
-        long startTimeInMillis = System.currentTimeMillis();
+        final long millisInMinute = 60 * 60 * 1000l;
+        long runInterval = (long) (millisInMinute * 60 * 24 *3); // 3days
+        long startTimeInMillis = System.currentTimeMillis() - millisInMinute*60*24*3;
 
-        long errorTime = startTimeInMillis + (20*60*1000l);
+        long errorTime = Long.MAX_VALUE;//startTimeInMillis + (20*60*1000l);
 
+        long timestamp = startTimeInMillis;
         long degree=-1;
-        for(;System.currentTimeMillis() < runInterval + startTimeInMillis;){
+        for(;timestamp < runInterval + startTimeInMillis;){
             try {
                 degree++;
                 final boolean isOldAppVersion = System.currentTimeMillis() < errorTime;
-                Thread.sleep(200);
-                final String appBusinessPerfMsg = "Processed Account # %d accounts in last 1 sec::Success";
+                Thread.sleep(80);
+                final String appBusinessPerfMsg = "Processed Account %d #accounts in last 1 min::Success";
 
                 if (isOldAppVersion) {
                     if(degree%35==0){
                         String logMsg = String.format(appBusinessPerfMsg, (int) random(380, 500));
                         logging(logMsg);
                     }
-                    postMetricsToOci("cpu", 30 + 10*mySine1(degree+90));
-                    postMetricsToOci("mem", 25 + 7 *mySine2(degree));
+                    postMetricsToOci("cpu", 30 + 10*mySine1(degree+90),timestamp);
+                    postMetricsToOci("mem", 25 + 7 *mySine2(degree), timestamp);
                 }else{
                     if(!newVersionDeployed){
                         newVersionDeployed = true;
@@ -194,9 +196,11 @@ public class LoggingAndMonitoring implements  Runnable{
                         String logMsg = String.format(appBusinessPerfMsg, (int) random(50, 100));
                         logging(logMsg);
                     }
-                    postMetricsToOci("cpu", 74 + 15*mySine1(degree+90));
-                    postMetricsToOci("mem", 48 + 10*mySine2(degree));
+                    postMetricsToOci("cpu", 74 + 15*mySine1(degree+90), timestamp);
+                    postMetricsToOci("mem", 48 + 10*mySine2(degree), timestamp);
                 }
+
+                timestamp = timestamp + millisInMinute;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
