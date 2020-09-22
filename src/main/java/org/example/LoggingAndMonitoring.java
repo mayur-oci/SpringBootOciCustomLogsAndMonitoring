@@ -22,11 +22,10 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoggingAndMonitoring implements  Runnable{
+public class LoggingAndMonitoring implements Runnable {
 
     static Logger logger = Logger.getLogger(LoggingAndMonitoring.class.getName());
 
@@ -59,7 +58,7 @@ public class LoggingAndMonitoring implements  Runnable{
         //FileHandler file name with max size and number of log files limit
         try {
             fileHandler = new FileHandler("/home/opc/tmp/logger.log",
-                   Integer.MAX_VALUE/100, 4, true);
+                    Integer.MAX_VALUE / 100, 4, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,8 +162,8 @@ public class LoggingAndMonitoring implements  Runnable{
     }
 
     static boolean causeError = false;
-    static boolean errorJustOccurred=true;
-    static long errorTS=Long.MAX_VALUE;
+    static boolean errorJustOccurred = true;
+    static long errorTS = Long.MAX_VALUE;
     static boolean stopThread = false;
     static long degree = -1;
 
@@ -173,9 +172,9 @@ public class LoggingAndMonitoring implements  Runnable{
     @Override
     public void run() {
 
-        synchronized (lock) {
 
-            while (true) {
+        while (true) {
+            synchronized (lock) {
                 if (stopThread) {
                     break;
                 }
@@ -217,22 +216,22 @@ public class LoggingAndMonitoring implements  Runnable{
 
 
     static double random(int min, int max) {
-        return  (min + (Math.random() * (max - min)));
+        return (min + (Math.random() * (max - min)));
     }
 
-    static double mySine1(double degrees){
-        double radians = Math.toRadians(degrees+random(-100,100));
-        if((System.currentTimeMillis()/1000)%200!=0 )
-        return Math.sin(radians);
-        else
-        return (Math.sin(radians) + Math.cos(radians+60) )/2;
-    }
-
-    static double mySine2(double degrees){
-        double radians = Math.toRadians(degrees+random(-100,100));
-        if((System.currentTimeMillis()/1000)%400!=0 )
+    static double mySine1(double degrees) {
+        double radians = Math.toRadians(degrees + random(-100, 100));
+        if ((System.currentTimeMillis() / 1000) % 200 != 0)
             return Math.sin(radians);
         else
-            return (Math.sin(radians) + Math.cos(radians+45) )/2;
+            return (Math.sin(radians) + Math.cos(radians + 60)) / 2;
+    }
+
+    static double mySine2(double degrees) {
+        double radians = Math.toRadians(degrees + random(-100, 100));
+        if ((System.currentTimeMillis() / 1000) % 400 != 0)
+            return Math.sin(radians);
+        else
+            return (Math.sin(radians) + Math.cos(radians + 45)) / 2;
     }
 }
