@@ -220,7 +220,7 @@ public class LoggingAndMonitoring implements Runnable {
     }
 
     static double mySine1(double degrees) {
-        double radians = Math.toRadians(degrees + random(-500, 500));
+        double radians = Math.toRadians(degrees + random(-200, 200));
         if ((System.currentTimeMillis() / 1000) % 200 != 0)
             return Math.sin(radians);
         else
@@ -228,7 +228,7 @@ public class LoggingAndMonitoring implements Runnable {
     }
 
     static double mySine2(double degrees) {
-        double radians = Math.toRadians(degrees + random(-500, 500));
+        double radians = Math.toRadians(degrees + random(-200, 200));
         if ((System.currentTimeMillis() / 1000) % 400 != 0)
             return Math.sin(radians);
         else
