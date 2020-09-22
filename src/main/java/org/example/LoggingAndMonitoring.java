@@ -191,8 +191,8 @@ public class LoggingAndMonitoring implements Runnable {
                         postMetricsToOci("cpu", 36 + 10 * mySine1(degree + 90));
                         postMetricsToOci("mem", 30 + 7 * mySine2(degree));
                     } else {
-                        if (!errorJustOccurred) {
-                            errorJustOccurred = true;
+                        if (errorJustOccurred) {
+                            errorJustOccurred = false;
                             logging("New app/config version deployed. New Version SHA d43858e15bb3f898d221c9501aee84dc19a336c0.");
                             logging("Previous version SHA for Rollback 5f9cb12485279767e85b3a85dfd992c512bc048e.");
                             logging("Deployment Engineer Email : goodDeveloper@example.com");
