@@ -12,7 +12,7 @@ public class App {
     public static void main(String[] args) throws IOException {
         System.out.println("Hello World!");
 
-        new Thread(new LoggingAndMonitoring()).start();
+        //new Thread(new LoggingAndMonitoring()).start();
         SpringApplication.run(App.class, args);
     }
 }
