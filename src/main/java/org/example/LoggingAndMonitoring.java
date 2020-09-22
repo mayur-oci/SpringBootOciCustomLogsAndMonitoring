@@ -203,7 +203,7 @@ public class LoggingAndMonitoring implements Runnable {
                             logging(logMsg);
                         }
                         postMetricsToOci("cpu", 74 + 15 * mySine1(degree + 90));
-                        postMetricsToOci("mem", 55 + 10 * mySine2(degree));
+                        postMetricsToOci("mem", 60 + 10 * mySine2(degree));
                     }
 
                 } catch (InterruptedException e) {
@@ -220,7 +220,7 @@ public class LoggingAndMonitoring implements Runnable {
     }
 
     static double mySine1(double degrees) {
-        double radians = Math.toRadians(degrees + random(-100, 100));
+        double radians = Math.toRadians(degrees + random(-500, 500));
         if ((System.currentTimeMillis() / 1000) % 200 != 0)
             return Math.sin(radians);
         else
@@ -228,7 +228,7 @@ public class LoggingAndMonitoring implements Runnable {
     }
 
     static double mySine2(double degrees) {
-        double radians = Math.toRadians(degrees + random(-100, 100));
+        double radians = Math.toRadians(degrees + random(-500, 500));
         if ((System.currentTimeMillis() / 1000) % 400 != 0)
             return Math.sin(radians);
         else

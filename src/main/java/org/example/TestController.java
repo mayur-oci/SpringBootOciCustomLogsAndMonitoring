@@ -10,20 +10,26 @@ import java.util.Date;
 @RestController
 public class TestController {
 
-    Thread worker;
+    public static Thread worker=null;
 
     @RequestMapping("/start")
     public String start() {
-        worker = new Thread(new LoggingAndMonitoring());
-        worker.start();
-        return "\nWorker started!";
+        if(worker==null) {
+            worker = new Thread(new LoggingAndMonitoring());
+            worker.start();
+            return "\nWorker started!";
+        }else{
+            return "Worker already running";
+        }
     }
 
     @RequestMapping("/stop")
-    public String stop() {
+    public String stop() throws InterruptedException {
         synchronized (LoggingAndMonitoring.lock) {
             LoggingAndMonitoring.stopThread = true;
         }
+        worker.join();
+        worker=null;
         return "\nWorker stopped!";
     }
 
