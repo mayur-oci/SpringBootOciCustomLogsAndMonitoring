@@ -27,7 +27,7 @@ public class TestController {
         return "\nWorker stopped!";
     }
 
-    @RequestMapping("/stop")
+    @RequestMapping("/reset")
     public String reset() throws InterruptedException {
         synchronized (LoggingAndMonitoring.lock) {
             LoggingAndMonitoring.stopThread = true;
