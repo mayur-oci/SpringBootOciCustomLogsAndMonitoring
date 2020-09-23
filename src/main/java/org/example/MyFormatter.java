@@ -10,7 +10,7 @@ public class MyFormatter extends Formatter {
     public String format(LogRecord record) {
 
 
-        return "Business Process-Account Creation" + "::"
+        return "eMedia Video Streaming" + "::"
                 + new Date(record.getMillis()) + "::"
                 + record.getMessage() + "\n";
 //        return record.getThreadID()+"::"+record.getSourceClassName()+"::"

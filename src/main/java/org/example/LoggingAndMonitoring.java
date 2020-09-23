@@ -184,7 +184,7 @@ public class LoggingAndMonitoring implements Runnable {
                     final String appBusinessPerfMsg = "In last 1 minute, %d # videos served :: Success";
 
                     if (causeError == false || System.currentTimeMillis() < errorTS) {
-                        if (degree % 35 == 0) {
+                        if (degree % 40 == 0) {
                             String logMsg = String.format(appBusinessPerfMsg, (int) random(380, 500));
                             logging(logMsg);
                         }
@@ -198,14 +198,14 @@ public class LoggingAndMonitoring implements Runnable {
                             logging("Deployment Engineer Email : goodDeveloper@example.com");
                         }
                         Thread.sleep(500);
-                        if (degree % 35 == 0) {
+                        if (degree % 40 == 0) {
                             String logMsg = String.format(appBusinessPerfMsg, (int) random(50, 100));
                             logging(logMsg);
                         }
-                        if (degree % 20 == 0) {
+                        if (degree % 50 == 0) {
                             logging("Stackoverflow for thread Id - " + Math.floor(random(10,90)) + ":: ERROR");
                         }
-                        if (degree % 30 == 0) {
+                        if (degree % 60 == 0) {
                             logging("Object Allocation failed, Out of memory :: ERROR");
                         }
 
