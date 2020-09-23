@@ -181,7 +181,7 @@ public class LoggingAndMonitoring implements Runnable {
                 try {
                     degree++;
                     Thread.sleep(500);
-                    final String appBusinessPerfMsg = "Transcoded %d #videos in last 1 min::Success";
+                    final String appBusinessPerfMsg = "In last 1 minute, %d # videos served :: Success";
 
                     if (causeError == false || System.currentTimeMillis() < errorTS) {
                         if (degree % 35 == 0) {
@@ -202,6 +202,13 @@ public class LoggingAndMonitoring implements Runnable {
                             String logMsg = String.format(appBusinessPerfMsg, (int) random(50, 100));
                             logging(logMsg);
                         }
+                        if (degree % 20 == 0) {
+                            logging("Stackoverflow for thread Id - " + Math.floor(random(10,90)) + ":: ERROR");
+                        }
+                        if (degree % 30 == 0) {
+                            logging("Object Allocation failed, Out of memory :: ERROR");
+                        }
+
                         postMetricsToOci("cpu", 74 + 15 * mySine1(degree + 90));
                         postMetricsToOci("mem", 60 + 10 * mySine2(degree));
                     }
